@@ -2,22 +2,20 @@
 <html lang="en">
 <head>
 
-  <meta charset="utf-8">
-  <title>chronoMaster 0.1</title>
-  <meta name="description" content="">
-  <meta name="author" content="otaku">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<title>chronoMaster 0.1</title>
+	<meta name="description" content="">
+	<meta name="author" content="otaku">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="./css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="./css/jquery.datetimepicker.css"/>
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/jquery.datetimepicker.css"/>
   
-   <script src="./js/jquery-3.2.1.min.js"></script>
-	 <script src="./js/jquery.datetimepicker.min.js"></script>
-	 <script src="./js/jquery.datetimepicker.full.js"></script>
-	 <script src="./js/popper.js"></script>
-	 <script src="./js/bootstrap.min.js"></script>
-	 
-
+	<script src="./js/jquery-3.2.1.min.js"></script>
+	<script src="./js/jquery.datetimepicker.min.js"></script>
+	<script src="./js/jquery.datetimepicker.full.js"></script>
+	<script src="./js/popper.js"></script>
+	<script src="./js/bootstrap.min.js"></script> 
   
 </head>
 <body onload="startTime()">
@@ -46,7 +44,10 @@
 	
 	<br><br>
 
-	<div id="log"></div>
+	<table id="log" border=1>
+	<tr><td><b>Rank</b></td><td><b>Time in Seconds</b></td></tr>
+	
+	</table>
 	
   
 </div>
@@ -55,8 +56,7 @@
  
    window.onbeforeunload = function(event)
     {
-		
-        //return confirm("Confirm refresh");
+       return confirm("Confirm refresh");
     };
  var runnerCount = 0;
  
@@ -69,7 +69,7 @@ var startDate = new Date($('#datetimepicker').val());
 var diff = now-startDate;
 var seconds = Math.round(diff/1000);
 
-        $("#log").append(runnerCount+': '+ seconds + '<br>');
+		$('#log tr:last').after('<tr><td>'+runnerCount+'</td><td>'+seconds+'</td></tr>');
 		$("#runnersLeftCount").text(runnerCount+' / '+($("#runnerStartedCount").val()-runnerCount));
 });
 
@@ -88,7 +88,6 @@ $("#datetimepicker_format_locale").on("change", function(e){
 
 $('#datetimepicker').datetimepicker({
 	formatTime:'H:i:s',
-	//mask:'39/12/9999 29:59:99',
 	formatDate:'d.m.Y',
 	format:'Y/m/d H:i:s',
 	datepicker:false,
@@ -102,14 +101,14 @@ function startTime() {
     var s = today.getSeconds();
     m = checkTime(m);
     s = checkTime(s);
-    document.getElementById('txt').innerHTML = h + ":" + m + ":" + s;
+	
 	
 	var startDate = new Date($('#datetimepicker').val());
 	var diff = today-startDate;
 	var seconds = Math.round(diff/1000);
-
+	
+    document.getElementById('txt').innerHTML = h + ":" + m + ":" + s;
 	document.getElementById('diff').innerHTML = pad(Math.round(seconds/60),2) + ':'+ pad(seconds % 60,2);
-
 	
     var t = setTimeout(startTime, 500);
 }
@@ -124,10 +123,6 @@ function pad(num, size) {
     return s;
 }
 
-
-
 </script>
-	 
-
 </body>
 </html>
