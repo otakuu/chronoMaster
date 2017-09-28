@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <title>chronoMaster 0.1</title>
+  <meta name="description" content="">
+  <meta name="author" content="otaku">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/jquery.datetimepicker.css"/>
+  
+   <script src="./js/jquery-3.2.1.min.js"></script>
+	 <script src="./js/jquery.datetimepicker.min.js"></script>
+	 <script src="./js/jquery.datetimepicker.full.js"></script>
+	 <script src="./js/popper.js"></script>
+	 <script src="./js/bootstrap.min.js"></script>
+	 
+
+  
+</head>
+<body onload="startTime()">
+
+<div class="container">
+  <h1>chronoMaster</h1><br>
+  
+  <table><tr><td>
+  	Start time:</td><td><input type="text" value="" id="datetimepicker"/></td></tr>
+	<tr><td>
+  	Current time:</td><td><div id="txt"></div></td></tr>
+	
+	<tr><td>
+  	Elapsed:</td><td><div id="diff"></div></td></tr>
+	
+	<tr><td>
+	Runners on the run:</td><td><input type="text" value="33" size="2" id="runnerStartedCount"/></td></tr>
+	<tr><td>
+	in/ out:</td><td><div id="runnersLeftCount"></div></td></tr>
+	
+</table>
+
+	<br>
+	
+	<button type="button" id="shot" class="btn btn-primary btn-lg">Schuss!</button>
+	
+	<br><br>
+
+	<div id="log"></div>
+	
+  
+</div>
+
+ <script>
+ 
+   window.onbeforeunload = function(event)
+    {
+		
+        //return confirm("Confirm refresh");
+    };
+ var runnerCount = 0;
+ 
+$("#shot").click(function(){
+
+runnerCount++;
+var now = new Date();
+var startDate = new Date($('#datetimepicker').val());
+
+var diff = now-startDate;
+var seconds = Math.round(diff/1000);
+
+        $("#log").append(runnerCount+': '+ seconds + '<br>');
+		$("#runnersLeftCount").text(runnerCount+' / '+($("#runnerStartedCount").val()-runnerCount));
+});
+
+$.datetimepicker.setLocale('de');
+
+$('#datetimepicker_format').datetimepicker({value:'15.04.2017 05:03', format: $("#datetimepicker_format_value").val()});
+console.log($('#datetimepicker_format').datetimepicker('getValue'));
+
+$("#datetimepicker_format_change").on("click", function(e){
+	$("#datetimepicker_format").data('xdsoft_datetimepicker').setOptions({format: $("#datetimepicker_format_value").val()});
+});
+$("#datetimepicker_format_locale").on("change", function(e){
+	$.datetimepicker.setLocale($(e.currentTarget).val());
+});
+
+
+$('#datetimepicker').datetimepicker({
+	formatTime:'H:i:s',
+	//mask:'39/12/9999 29:59:99',
+	formatDate:'d.m.Y',
+	format:'Y/m/d H:i:s',
+	datepicker:false,
+	step:1
+});
+
+function startTime() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+    document.getElementById('txt').innerHTML = h + ":" + m + ":" + s;
+	
+	var startDate = new Date($('#datetimepicker').val());
+	var diff = today-startDate;
+	var seconds = Math.round(diff/1000);
+
+	document.getElementById('diff').innerHTML = pad(Math.round(seconds/60),2) + ':'+ pad(seconds % 60,2);
+
+	
+    var t = setTimeout(startTime, 500);
+}
+function checkTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
+
+
+
+</script>
+	 
+
+</body>
+</html>
