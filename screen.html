@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+	<title>Buechibärger Herbstlauf</title>
+	<meta name="description" content="">
+	<meta name="author" content="otaku">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/jquery.datetimepicker.css"/>
+  
+	<script src="./js/jquery-3.2.1.min.js"></script>
+	<script src="./js/jquery.datetimepicker.min.js"></script>
+	<script src="./js/jquery.datetimepicker.full.js"></script>
+	<script src="./js/popper.js"></script>
+	<script src="./js/bootstrap.min.js"></script> 
+	
+	<style type="text/css">
+	@font-face {
+    font-family:"CursedTimer";
+    src: url("font/CursedTimerULiL.ttf");
+}
+
+#diff {
+    font-family:'CursedTimer', sans-serif;
+    font-size: 60px;
+    text-align: center;
+
+}
+
+body {
+background-color:powderblue;
+}
+	</style>
+  
+</head>
+<body onload="startTime()">
+
+<div class="container">
+  <h3>Buechibärger Herbstlauf 2019</h3>
+  
+	<div id="diff"></div><br><br><br>
+	<div id="txt"></div>
+	<input type="text" value="" id="datetimepicker"/>
+
+</div>
+
+<script>
+
+  window.onbeforeunload = function(event)
+    {
+       return confirm("Confirm refresh");
+    };
+
+$.datetimepicker.setLocale('de');
+
+$('#datetimepicker_format').datetimepicker({value:'15.04.2017 05:03', format: $("#datetimepicker_format_value").val()});
+console.log($('#datetimepicker_format').datetimepicker('getValue'));
+
+$("#datetimepicker_format_change").on("click", function(e){
+	$("#datetimepicker_format").data('xdsoft_datetimepicker').setOptions({format: $("#datetimepicker_format_value").val()});
+});
+$("#datetimepicker_format_locale").on("change", function(e){
+	$.datetimepicker.setLocale($(e.currentTarget).val());
+});
+
+
+$('#datetimepicker').datetimepicker({
+	formatTime:'H:i:s',
+	formatDate:'d.m.Y',
+	format:'Y/m/d H:i:s',
+	datepicker:false,
+	step:1
+});
+
+function startTime() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+	
+	
+	var startDate = new Date($('#datetimepicker').val());
+	var diff = today-startDate;
+	var seconds = Math.round(diff/1000);
+	
+    document.getElementById('txt').innerHTML = h + ":" + m + ":" + s;
+	document.getElementById('diff').innerHTML = pad(Math.round(seconds/60),2) + ':'+ pad(seconds % 60,2);
+	
+    var t = setTimeout(startTime, 500);
+}
+function checkTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
+
+</script>
+</body>
+</html>
